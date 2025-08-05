@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tesis-robotica"
+version = "1.0.0"
+description = "Sistema de clasificación de residuos con brazo robótico"
+authors = [
+    {name = "José Vielma", email = "jgvielma.21@est.ucab.edu.ve"},
+    {name = "Cristina Morales", email = "cmorales.21@est.ucab.edu.ve"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    # Dependencias para Model (Computer Vision y ML)
+    "opencv-python>=4.8.0",
+    "numpy>=1.24.0",
+    "rembg>=2.0.0",
+    "Pillow>=10.0.0",
+    "tensorflow>=2.13.0",
+    "keras>=2.13.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/GloodBuster/Tesis-Brazo-Robotico"
+Repository = "https://github.com/GloodBuster/Tesis-Brazo-Robotico.git" 

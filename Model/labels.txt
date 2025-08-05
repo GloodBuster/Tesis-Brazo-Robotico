@@ -1,0 +1,6 @@
+0 Carton
+1 Papel
+2 Vidrio
+3 Baterias
+4 Plastico
+5 Metal
