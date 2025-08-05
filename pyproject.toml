@@ -12,10 +12,10 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.8"
+license = {text = "MIT"}
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Education",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -25,14 +25,15 @@ classifiers = [
 
 dependencies = [
     # Dependencias para Model (Computer Vision y ML)
-    "opencv-python>=4.8.0",
-    "numpy>=1.24.0",
-    "rembg>=2.0.0",
-    "Pillow>=10.0.0",
-    "tensorflow>=2.13.0",
-    "keras>=2.13.0",
+    "opencv-python==4.11.0.86",
+    "tensorflow==2.12.1",
+    "keras==2.12.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/GloodBuster/Tesis-Brazo-Robotico"
-Repository = "https://github.com/GloodBuster/Tesis-Brazo-Robotico.git" 
+Repository = "https://github.com/GloodBuster/Tesis-Brazo-Robotico.git"
+
+[tool.setuptools.packages.find]
+include = ["Model*", "Robot Movement*"]
+exclude = ["*.tests*", "*.test*", "References*"] 
