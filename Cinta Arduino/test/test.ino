@@ -60,8 +60,7 @@ void handleButton() {
 
 void handleActivationLogic() {
   int temp=digitalRead(sensor);      //assign value of LDR sensor to a temporary variable
-  Serial.println("Intensity=");  //print on serial monitor using ""
-  Serial.println(temp);         //display  output on serial monitor
+  Serial.println(temp);         //send only the value directly
   delay(300);
 
   if(temp==HIGH) {               //HIGH  means,light got blocked
