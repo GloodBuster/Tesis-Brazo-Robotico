@@ -3,6 +3,7 @@ __pycache__/
 .vscode/
 References/
 tesis_robotica.egg-info/
-Cinta Arduino/Arduino/
+Cinta_Arduino/Arduino/
 Model/unused-models/
 build/
+resultados_robot.json
