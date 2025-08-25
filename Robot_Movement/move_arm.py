@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 def mover_servo(numero_servo, posicion_us):
     """
@@ -9,7 +10,13 @@ def mover_servo(numero_servo, posicion_us):
         posicion_us (int): La posición deseada del servo en microsegundos.
     """
     try:
-        comando = ["./control_brazo.exe", str(numero_servo), str(posicion_us)]
+        # Obtener la ruta del directorio donde está este archivo
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Construir la ruta completa al ejecutable
+        exe_path = os.path.join(current_dir, "control_brazo.exe")
+        
+        comando = [exe_path, str(numero_servo), str(posicion_us)]
         resultado = subprocess.run(comando, capture_output=True, text=True, check=True)
         print(f"Servo {numero_servo} movido a posición {posicion_us}")
         print(resultado.stdout)
@@ -18,4 +25,5 @@ def mover_servo(numero_servo, posicion_us):
         print(f"Error al ejecutar el programa C++: {e}")
         print(f"Salida del error: {e.stderr}")
     except FileNotFoundError:
-        print("Error: No se encontró el archivo control_brazo.exe. Asegúrate de que esté en el mismo directorio.")
+        print(f"Error: No se encontró el archivo {exe_path}")
+        print("Asegúrate de que control_brazo.exe esté en el directorio Robot_Movement/")

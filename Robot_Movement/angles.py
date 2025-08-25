@@ -1,12 +1,12 @@
 import numpy as np
 
-from move_arm import mover_servo
+from Robot_Movement.move_arm import mover_servo
 
 servo_calibration = {
     "q1": {
-        "min_angle": 0,
+        "min_angle": -80,
         "max_angle": 90,
-        "min_pulse": 1505,
+        "min_pulse": 496,
         "max_pulse": 2418,
         "offset": 0,
     },
