@@ -8,6 +8,7 @@ const int PWM1 = 3;
 const int AIN2 = 6;
 const int AIN1 = 5;
 const int STBY = 7;
+const int speed = 180;
 
 void setup() {
   initializePines();
@@ -59,9 +60,9 @@ void handleButton() {
 }
 
 void handleActivationLogic() {
+  delay(300);
   int temp=digitalRead(sensor);      //assign value of LDR sensor to a temporary variable
   Serial.println(temp);         //send only the value directly
-  delay(300);
 
   if(temp==HIGH) {               //HIGH  means,light got blocked
     digitalWrite(ledRojo, HIGH);
@@ -88,7 +89,7 @@ void girarHorario() {
   digitalWrite(AIN1, HIGH);
   digitalWrite(STBY, HIGH);
   digitalWrite(AIN2, LOW);
-  analogWrite(PWM1, 255);
+  analogWrite(PWM1, speed);
 }
 
 void girarAntiHorario() {
@@ -96,7 +97,7 @@ void girarAntiHorario() {
   digitalWrite(AIN1, LOW);
   digitalWrite(STBY, HIGH);
   digitalWrite(AIN2, HIGH);
-  analogWrite(PWM1, 255);
+  analogWrite(PWM1, speed);
 }
 
 void detenerMotor() {
