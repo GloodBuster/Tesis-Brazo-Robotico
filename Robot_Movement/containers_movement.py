@@ -30,11 +30,11 @@ def colocar_papel_y_carton():
 
 
 def colocar_plastico():
-    return mover(0, 8, custom_offset=8, cinta=True)
+    return mover(0, 1, custom_offset=13, cinta=True)
 
 
 def colocar_vidrio():
-    return mover(8, -3, custom_offset=5, cinta=True)
+    return mover(3, -1, custom_offset=13, cinta=True)
 
 
 def colocar_metal_y_bateria():
