@@ -50,12 +50,12 @@ cap = None
 # Estado de las categorías para la interfaz visual
 categoria_activa = None
 colores_categorias = {
-    "Papel": (255, 0, 0),      # Azul
-    "Carton": (255, 0, 0),     # Azul
-    "Plastico": (0, 255, 255), # Amarillo
-    "Vidrio": (0, 255, 0),     # Verde
-    "Metal": (0, 0, 255),      # Rojo
-    "Baterias": (0, 0, 255),   # Rojo
+    "Papel": (255, 0, 0),  # Azul
+    "Carton": (255, 0, 0),  # Azul
+    "Plastico": (0, 255, 255),  # Amarillo
+    "Vidrio": (0, 255, 0),  # Verde
+    "Metal": (0, 0, 255),  # Rojo
+    "Baterias": (0, 0, 255),  # Rojo
 }
 color_inactivo = (128, 128, 128)  # Gris
 
@@ -111,7 +111,7 @@ def obtener_clasificacion(prediction):
     max_prob = prediction[max_index]
 
     # Solo clasificar si la probabilidad es mayor al 70%
-    if max_prob > 0.7:
+    if max_prob > 0.6:
         categoria = labels_clasificacion[str(max_index)]
         return categoria, max_prob
     return None, 0
@@ -158,7 +158,7 @@ def mostrar_estado(frame, estado, clasificacion=None, probabilidad=0):
 def dibujar_categorias(frame):
     """Dibuja las 6 categorías con sus cuadrados de colores."""
     global categoria_activa
-    
+
     # Configuración de la interfaz - ahora 6 categorías separadas
     categorias = ["Papel", "Carton", "Plastico", "Vidrio", "Metal", "Baterias"]
     pos_x = 10
@@ -166,34 +166,34 @@ def dibujar_categorias(frame):
     espaciado_y = 35
     tamano_cuadrado = 20
     espaciado_texto = 30
-    
+
     # Obtener categoría activa de forma thread-safe
     with lock_clasificacion:
         categoria_actual = categoria_activa
-    
+
     for i, categoria in enumerate(categorias):
         y = pos_y + i * espaciado_y
-        
+
         # Determinar el color del cuadrado
         if categoria_actual == categoria:
             color = colores_categorias[categoria]
         else:
             color = color_inactivo
-        
+
         # Dibujar cuadrado
-        cv2.rectangle(frame, 
-                     (pos_x, y), 
-                     (pos_x + tamano_cuadrado, y + tamano_cuadrado), 
-                     color, 
-                     -1)  # -1 para rellenar
-        
+        cv2.rectangle(
+            frame, (pos_x, y), (pos_x + tamano_cuadrado, y + tamano_cuadrado), color, -1
+        )  # -1 para rellenar
+
         # Dibujar borde del cuadrado
-        cv2.rectangle(frame, 
-                     (pos_x, y), 
-                     (pos_x + tamano_cuadrado, y + tamano_cuadrado), 
-                     (255, 255, 255), 
-                     2)
-        
+        cv2.rectangle(
+            frame,
+            (pos_x, y),
+            (pos_x + tamano_cuadrado, y + tamano_cuadrado),
+            (255, 255, 255),
+            2,
+        )
+
         # Dibujar texto de la categoría
         cv2.putText(
             frame,
@@ -210,33 +210,37 @@ def dibujar_categorias(frame):
 def inicializar_camara():
     """Inicializa la cámara."""
     global cap
-    
+
     # Intentar diferentes índices de cámara
     for camera_index in [0, 1, 2]:
         print(f"Intentando conectar a cámara {camera_index}...")
         cap = cv2.VideoCapture(camera_index)
-        
+
         if cap.isOpened():
             # Intentar configurar resolución
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, DISPLAY_WIDTH)
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, DISPLAY_HEIGHT)
-            
+
             # Dar tiempo a la cámara para inicializarse completamente
             time.sleep(1)
-            
+
             # Verificar que realmente se puede leer un frame
             ret, test_frame = cap.read()
             if ret and test_frame is not None:
                 print(f"Cámara {camera_index} inicializada exitosamente")
-                print(f"Resolución configurada: {DISPLAY_WIDTH}x{DISPLAY_HEIGHT} píxeles")
-                print(f"Imagen para modelo: {MODEL_IMAGE_SIZE}x{MODEL_IMAGE_SIZE} píxeles")
+                print(
+                    f"Resolución configurada: {DISPLAY_WIDTH}x{DISPLAY_HEIGHT} píxeles"
+                )
+                print(
+                    f"Imagen para modelo: {MODEL_IMAGE_SIZE}x{MODEL_IMAGE_SIZE} píxeles"
+                )
                 return True
             else:
                 print(f"Cámara {camera_index} no puede leer frames")
                 cap.release()
         else:
             print(f"No se pudo abrir cámara {camera_index}")
-    
+
     print("Error: No se pudo inicializar ninguna cámara.")
     return False
 
@@ -245,13 +249,13 @@ def reinicializar_camara():
     """Reinicializa la cámara si hay problemas."""
     global cap, errores_camara
     print("Reinicializando cámara...")
-    
+
     if cap is not None:
         cap.release()
-    
+
     time.sleep(2)  # Esperar antes de reintentar
     errores_camara = 0
-    
+
     return inicializar_camara()
 
 
@@ -268,6 +272,7 @@ def procesar_clasificacion():
     try:
         # PRIMERA FASE: Clasificación del objeto
         print("Fase 1: Clasificando objeto...")
+        time.sleep(1)
 
         # Obtener frame completo de la cámara
         ret, frame = cap.read()
@@ -276,7 +281,9 @@ def procesar_clasificacion():
             return
 
         print(f"Imagen capturada: {frame.shape[1]}x{frame.shape[0]} píxeles")
-        print(f"Redimensionando a: {MODEL_IMAGE_SIZE}x{MODEL_IMAGE_SIZE} píxeles para el modelo")
+        print(
+            f"Redimensionando a: {MODEL_IMAGE_SIZE}x{MODEL_IMAGE_SIZE} píxeles para el modelo"
+        )
 
         # Procesar imagen completa con el modelo (se redimensiona internamente)
         prediction = procesar_imagen(frame)
@@ -337,14 +344,13 @@ def procesar_clasificacion():
         print("Proceso de clasificación completado")
 
 
-
-
-
 def main():
     global model, arduino, cap
 
     print("Iniciando sistema de clasificación automática...")
-    print(f"Configuración: Pantalla {DISPLAY_WIDTH}x{DISPLAY_HEIGHT}, Modelo {MODEL_IMAGE_SIZE}x{MODEL_IMAGE_SIZE}")
+    print(
+        f"Configuración: Pantalla {DISPLAY_WIDTH}x{DISPLAY_HEIGHT}, Modelo {MODEL_IMAGE_SIZE}x{MODEL_IMAGE_SIZE}"
+    )
 
     # Cargar modelo
     model = cargar_modelo()
@@ -358,12 +364,20 @@ def main():
         print("¿Deseas continuar con una imagen de prueba? (s/n): ", end="")
         try:
             respuesta = input().lower()
-            if respuesta == 's':
+            if respuesta == "s":
                 # Crear una imagen de prueba
-                frame_prueba = np.zeros((DISPLAY_HEIGHT, DISPLAY_WIDTH, 3), dtype=np.uint8)
-                cv2.putText(frame_prueba, "MODO PRUEBA - Sin Camara", 
-                           (DISPLAY_WIDTH//2 - 150, DISPLAY_HEIGHT//2), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                frame_prueba = np.zeros(
+                    (DISPLAY_HEIGHT, DISPLAY_WIDTH, 3), dtype=np.uint8
+                )
+                cv2.putText(
+                    frame_prueba,
+                    "MODO PRUEBA - Sin Camara",
+                    (DISPLAY_WIDTH // 2 - 150, DISPLAY_HEIGHT // 2),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1,
+                    (255, 255, 255),
+                    2,
+                )
                 print("Modo prueba activado")
             else:
                 print("Saliendo...")
@@ -386,29 +400,44 @@ def main():
     # Iniciar monitoreo
     arduino.start_monitoring(callback=on_temp_update)
 
+    calibrar_brazo()
+    time.sleep(1)
+
     print("Sistema listo. Presiona 'ESC' para salir")
     print("El sistema clasificará automáticamente cuando detecte un objeto")
 
     try:
         while True:
             # Capturar frame de la cámara o usar imagen de prueba
-            if 'frame_prueba' in locals():
+            if "frame_prueba" in locals():
                 frame = frame_prueba.copy()
             else:
                 try:
                     ret, frame = cap.read()
                     if not ret or frame is None:
                         errores_camara += 1
-                        print(f"Error al capturar frame de la cámara ({errores_camara}/{MAX_ERRORES_CAMARA}), reintentando...")
-                        
+                        print(
+                            f"Error al capturar frame de la cámara ({errores_camara}/{MAX_ERRORES_CAMARA}), reintentando..."
+                        )
+
                         if errores_camara >= MAX_ERRORES_CAMARA:
                             print("Demasiados errores de cámara, reinicializando...")
                             if not reinicializar_camara():
-                                print("No se pudo reinicializar la cámara, usando modo prueba")
-                                frame_prueba = np.zeros((DISPLAY_HEIGHT, DISPLAY_WIDTH, 3), dtype=np.uint8)
-                                cv2.putText(frame_prueba, "MODO PRUEBA - Error de Camara", 
-                                           (DISPLAY_WIDTH//2 - 150, DISPLAY_HEIGHT//2), 
-                                           cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                                print(
+                                    "No se pudo reinicializar la cámara, usando modo prueba"
+                                )
+                                frame_prueba = np.zeros(
+                                    (DISPLAY_HEIGHT, DISPLAY_WIDTH, 3), dtype=np.uint8
+                                )
+                                cv2.putText(
+                                    frame_prueba,
+                                    "MODO PRUEBA - Error de Camara",
+                                    (DISPLAY_WIDTH // 2 - 150, DISPLAY_HEIGHT // 2),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    1,
+                                    (255, 255, 255),
+                                    2,
+                                )
                                 frame = frame_prueba.copy()
                             else:
                                 errores_camara = 0
@@ -416,18 +445,32 @@ def main():
                             time.sleep(0.5)
                             continue
                     else:
-                        errores_camara = 0  # Resetear contador si la captura fue exitosa
+                        errores_camara = (
+                            0  # Resetear contador si la captura fue exitosa
+                        )
                 except Exception as e:
                     errores_camara += 1
-                    print(f"Error en captura de frame: {e} ({errores_camara}/{MAX_ERRORES_CAMARA})")
+                    print(
+                        f"Error en captura de frame: {e} ({errores_camara}/{MAX_ERRORES_CAMARA})"
+                    )
                     if errores_camara >= MAX_ERRORES_CAMARA:
                         print("Demasiados errores de cámara, reinicializando...")
                         if not reinicializar_camara():
-                            print("No se pudo reinicializar la cámara, usando modo prueba")
-                            frame_prueba = np.zeros((DISPLAY_HEIGHT, DISPLAY_WIDTH, 3), dtype=np.uint8)
-                            cv2.putText(frame_prueba, "MODO PRUEBA - Error de Camara", 
-                                       (DISPLAY_WIDTH//2 - 150, DISPLAY_HEIGHT//2), 
-                                       cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                            print(
+                                "No se pudo reinicializar la cámara, usando modo prueba"
+                            )
+                            frame_prueba = np.zeros(
+                                (DISPLAY_HEIGHT, DISPLAY_WIDTH, 3), dtype=np.uint8
+                            )
+                            cv2.putText(
+                                frame_prueba,
+                                "MODO PRUEBA - Error de Camara",
+                                (DISPLAY_WIDTH // 2 - 150, DISPLAY_HEIGHT // 2),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                1,
+                                (255, 255, 255),
+                                2,
+                            )
                             frame = frame_prueba.copy()
                         else:
                             errores_camara = 0

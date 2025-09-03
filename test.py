@@ -13,3 +13,5 @@ if __name__ == "__main__":
     calibrar_brazo()
     time.sleep(2)
     colocar_vidrio()
+    time.sleep(2)
+    calibrar_brazo()

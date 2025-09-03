@@ -8,7 +8,7 @@ const int PWM1 = 3;
 const int AIN2 = 6;
 const int AIN1 = 5;
 const int STBY = 7;
-const int speed = 180;
+const int speed = 230;
 
 void setup() {
   initializePines();
@@ -60,7 +60,6 @@ void handleButton() {
 }
 
 void handleActivationLogic() {
-  delay(300);
   int temp=digitalRead(sensor);      //assign value of LDR sensor to a temporary variable
   Serial.println(temp);         //send only the value directly
 
