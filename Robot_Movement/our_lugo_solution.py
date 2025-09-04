@@ -8,7 +8,7 @@ e1, e2, e3, e4, e5, cinta_offset = (
     12,
     5,
     6,
-    7.5,
+    7.2,
 )  # Updated with precise measurements
 
 
